@@ -1,13 +1,13 @@
 import { Image, StyleSheet } from "react-native";
 import { Text, View } from "@/src/components/Themed";
 import Colors from "@/src/constants/Colors";
+import { Product } from "@/src/types";
+
+export const defaultPizzaImage =
+  "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
 
 interface ProductListItemProps {
-  product: {
-    name: string;
-    price: number;
-    image: string;
-  };
+  product: Product;
 }
 
 export const ProductListItem = ({ product }: ProductListItemProps) => {
@@ -15,7 +15,10 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
 
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={{ uri: image }} />
+      <Image
+        style={styles.image}
+        source={{ uri: image || defaultPizzaImage }}
+      />
       <Text style={styles.title}>{name}</Text>
       <Text style={styles.price}>${price}</Text>
     </View>
