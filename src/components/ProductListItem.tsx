@@ -2,7 +2,7 @@ import { Image, StyleSheet, Pressable } from "react-native";
 import { Text, View } from "@/src/components/Themed";
 import Colors from "@/src/constants/Colors";
 import { Product } from "@/src/types";
-import { Link } from "expo-router";
+import { Link, useSegments } from "expo-router";
 
 export const defaultPizzaImage =
   "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
@@ -13,11 +13,12 @@ interface ProductListItemProps {
 
 export const ProductListItem = ({ product }: ProductListItemProps) => {
   const { name, price, image } = product;
+  const segments = useSegments();
 
   return (
     <Link
       href={{
-        pathname: `/menu/${product.id}`,
+        pathname: `/${segments[0]}/menu/${product.id}`,
       }}
       asChild
     >
