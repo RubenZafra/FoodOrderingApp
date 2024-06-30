@@ -49,32 +49,8 @@ const ProductDetailsScreen = () => {
         style={styles.image}
       />
 
-      <Text>Select size</Text>
-
-      <View style={styles.sizes}>
-        {sizes.map((size) => (
-          <Pressable
-            onPress={() => setPizzaSize(size)}
-            style={[
-              styles.size,
-              { backgroundColor: pizzaSize === size ? "gainsboro" : "white" },
-            ]}
-            key={size}
-          >
-            <Text
-              style={[
-                styles.sizeText,
-                { color: pizzaSize === size ? "black" : "gray" },
-              ]}
-            >
-              {size}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
-
+      <Text style={styles.title}>{name}</Text>
       <Text style={styles.price}>${price}</Text>
-      <Button text='Add to cart' onPress={addToCart} />
     </View>
   );
 };
@@ -87,6 +63,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 10,
   },
+  title: {
+    fontSize: 22,
+    fontWeight: "600",
+    marginVertical: 10,
+  },
   image: {
     width: "100%",
     aspectRatio: 1,
@@ -94,22 +75,5 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 18,
     fontWeight: "bold",
-    marginTop: "auto",
-  },
-  sizes: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginVertical: 10,
-  },
-  size: {
-    width: 50,
-    aspectRatio: 1,
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  sizeText: {
-    fontSize: 20,
-    fontWeight: "600",
   },
 });
