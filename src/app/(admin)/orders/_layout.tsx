@@ -4,15 +4,9 @@ export default function MenuStack() {
   return (
     <Stack>
       <Stack.Screen
-        name='index'
+        name='list'
         options={{
-          title: "Orders",
-        }}
-      />
-      <Stack.Screen
-        name='[id]'
-        options={{
-          title: "Order #id",
+          headerShown: false,
         }}
       />
     </Stack>
