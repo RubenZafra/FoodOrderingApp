@@ -7,10 +7,13 @@ import {
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/src/components/useColorScheme";
+import { supabase } from "@/src/lib/supabase";
+import { Session } from "@supabase/supabase-js";
+import useSessionStore from "@/src/stores/auth-store";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -51,6 +54,18 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  const { setSession, setLoading } = useSessionStore();
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session);
+      setLoading(false);
+    };
+    fetchSession();
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>

@@ -1,6 +1,12 @@
-import { Stack } from "expo-router";
+import useSessionStore from "@/src/stores/auth-store";
+import { Redirect, Stack } from "expo-router";
 
 export default function MenuStack() {
+  const { session } = useSessionStore();
+
+  if (session) {
+    return <Redirect href={"/"} />;
+  }
   return (
     <Stack>
       <Stack.Screen
