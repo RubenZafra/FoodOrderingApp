@@ -1,25 +1,49 @@
-import { create } from "zustand";
+import { supabase } from "@/src/lib/supabase";
 import { Session } from "@supabase/supabase-js";
+import { create } from "zustand";
 
+interface Profile {
+  avatar_url: string | null;
+  full_name: string | null;
+  id: string | null;
+  group: string;
+  updated_at: string | null;
+  username: string | null;
+  website: string | null;
+}
 interface SessionStore {
   session: Session | null;
-  setSession: (session: Session | null) => void;
   loading: boolean;
-  setLoading: (loading: boolean) => void;
+  fetchSession: () => Promise<void>;
+  isAdmin: boolean;
+  profile: Profile | null;
 }
 
 const useSessionStore = create<SessionStore>()((set, get) => ({
   session: null,
-  setSession: (session) => {
-    set((state) => ({
-      session,
-    }));
-  },
   loading: true,
-  setLoading: (loading) => {
-    set((state) => ({
-      loading,
-    }));
+  isAdmin: false,
+  profile: null,
+  fetchSession: async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (session) {
+      const { data } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      set((state) => ({
+        ...state,
+        isAdmin: data?.group === "admin",
+        profile: data || null,
+        session,
+        loading: false,
+      }));
+    }
   },
 }));
 

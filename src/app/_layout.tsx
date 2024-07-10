@@ -7,12 +7,11 @@ import {
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/src/components/useColorScheme";
-import { supabase } from "@/src/lib/supabase";
-import { Session } from "@supabase/supabase-js";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import useSessionStore from "@/src/stores/auth-store";
 
 export {
@@ -52,29 +51,27 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
+// Create a client
+const queryClient = new QueryClient();
+
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  const { setSession, setLoading } = useSessionStore();
+  const { fetchSession } = useSessionStore();
+
   useEffect(() => {
-    const fetchSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setSession(data.session);
-      setLoading(false);
-    };
     fetchSession();
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
   }, []);
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name='(auth)' options={{ headerShown: false }} />
-        <Stack.Screen name='(user)' options={{ headerShown: false }} />
-        <Stack.Screen name='(admin)' options={{ headerShown: false }} />
-        <Stack.Screen name='cart' options={{ presentation: "modal" }} />
-      </Stack>
+      <QueryClientProvider client={queryClient}>
+        <Stack>
+          <Stack.Screen name='(auth)' options={{ headerShown: false }} />
+          <Stack.Screen name='(user)' options={{ headerShown: false }} />
+          <Stack.Screen name='(admin)' options={{ headerShown: false }} />
+          <Stack.Screen name='cart' options={{ presentation: "modal" }} />
+        </Stack>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

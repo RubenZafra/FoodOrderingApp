@@ -4,7 +4,6 @@ import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import products from "@/assets/data/products";
 import { defaultPizzaImage } from "@/src/components/ProductListItem";
 import { useState } from "react";
-import Button from "@/src/components/Button";
 import useCartStore from "@/src/stores/cart-store";
 import { PizzaSize } from "@/src/types";
 import { FontAwesome } from "@expo/vector-icons";
