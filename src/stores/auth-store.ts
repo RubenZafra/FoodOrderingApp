@@ -38,11 +38,18 @@ const useSessionStore = create<SessionStore>()((set, get) => ({
 
       set((state) => ({
         ...state,
-        isAdmin: data?.group === "admin",
+        isAdmin: data?.group === "ADMIN",
         profile: data || null,
         session,
         loading: false,
       }));
+
+      supabase.auth.onAuthStateChange((_event, session) => {
+        set((state) => ({
+          ...state,
+          session,
+        }));
+      });
     }
   },
 }));
